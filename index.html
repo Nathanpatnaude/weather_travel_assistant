@@ -6,9 +6,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="./assets/css/style.css" />
-    <title>Document</title>
+    <title>Weather Travel Assistant</title>
 </head>
 <body>
+    <header>
+        <h1></h1>
+        <h1>Weather Travel Assistant</h1>
+    </header>
+
+    <div class="row">
+        <div class="sideBar col-3">
+            <div class="searchBox justify-center">
+                <h2>Search for a City:</h2>
+                <textarea class="searchInput"></textarea>
+                <button class="searchBtn" id="searchBtnInput"> Search </button>
+            </div>
+            <div class="container searchRecent">
+
+            </div>
+        </div>
+
+        <div class="forcastResults col-9">
+            <div class="forcastToday row"></div>
+            <div class="forcastFive row">
+                <h2>5-Day Forecast:</h2>
+                <div class="forcastDays row"></div>
+            </div>
+        </div>
+
+    </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="./assets/js/script.js"></script>
