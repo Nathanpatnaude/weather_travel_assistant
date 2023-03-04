@@ -44,6 +44,12 @@ input {
     margin: 10px;
 }
 
+.icon {
+    width:10%;
+    height:10%;
+    margin-left: 25px;
+}
+
 #searchBtnInput {
     background-color: cornflowerblue;
     margin-left: 5px;

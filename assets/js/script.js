@@ -23,7 +23,35 @@ if (weatherSearchHistory === null) {
 //load local storage weatherSearchHistory { home: "", recent: ["", ""]} / populate home dropdown
 
 function buildWeather(weatherData) {
+    var date =$("<h>");
+    date.addClass("h2");
+    date.text("(" + new Date(Date.now()).toLocaleString().split(',')[0] + ")")
     $(".forecastToday").empty();
+    var icon = $("<img>");
+    icon.addClass("icon");
+    console.log(weatherData.weather[0].icon);
+    icon.attr('src', "https://openweathermap.org/img/wn/" + weatherData.weather[0].icon + ".png")
+    var city =$("<h>");
+    city.addClass("h2");
+    city.text( weatherData.name);
+    var feelsTemp = $("<div>");
+    feelsTemp.text("Feels like: " + weatherData.main.feels_like + " F");
+    var temp = $("<h>");
+    temp.text("Temp: " + weatherData.main.temp + " F").addClass("h3");
+    var otherTemp = $("<div>");
+    otherTemp.text("Hi: " + weatherData.main.temp_max + " F / Lo: " + weatherData.main.temp_min + " F");
+    var wind = $("<div>");
+    wind.text("Wind: " + weatherData.wind.speed + " MPH")
+    var humidity = $("<div>");
+
+    $(".forecastToday").append(date);
+    $(".forecastToday").append(icon);
+    $(".forecastToday").append(city);
+    $(".forecastToday").append(temp);
+    $(".forecastToday").append(feelsTemp);
+    $(".forecastToday").append(otherTemp);
+    $(".forecastToday").append(wind);
+    $(".forecastToday").append(humidity);
 
 };
 
@@ -70,6 +98,7 @@ function getWeather(lat, lon) {
     })
     .then(function (data) {
         console.log(data);
+        
         buildWeather(data);
     })
 
