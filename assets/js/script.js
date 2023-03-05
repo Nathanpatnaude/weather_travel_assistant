@@ -30,11 +30,9 @@ document.querySelector('.unitSelect').addEventListener('change', function () {
 document.querySelector('.homeSelect').addEventListener('change', function () {
     weatherSearchHistory.home = document.querySelector('.homeSelect').value;
     localStorage.setItem("weatherSearches", JSON.stringify(weatherSearchHistory));
-    if (weatherSearchHistory.home != weatherSearchHistory.last) {
-        getGeoLoc(weatherSearchHistory.home);
-    } else {
-        buildRecent(weatherSearchHistory.home);
-    }
+
+    getGeoLoc(weatherSearchHistory.home);
+
 
 })
 
@@ -67,7 +65,13 @@ function buildRecent(city) {
             //* removes button parent and rebuildResponse()
             //* if recent search was also the home location, home location is reset
             if ($(this).siblings('.searchBtnRecent').text() === weatherSearchHistory.home) {
+                if (weatherSearchHistory.home === weatherSearchHistory.last && weatherSearchHistory.list.length < 2) {
+                    weatherSearchHistory.last = 'Springfild';
+                } else {
+                    weatherSearchHistory.last = weatherSearchHistory.list[0];
+                }
                 weatherSearchHistory.home = 'Home Location';
+                getGeoLoc(weatherSearchHistory.last);
 
             } else if ($(this).siblings('.searchBtnRecent').text() === weatherSearchHistory.last) {
                 if (weatherSearchHistory.home = 'Home Location') {
