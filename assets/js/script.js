@@ -1,5 +1,5 @@
 
-var apiKey = "85b2ec11dc0efbf1ecf90462e1fcb01d"
+var apey = "85b2ec11dc0efbf1ecf90462e1fcb01d"
 
 // Checks for localStorage or builds obj
 var weatherSearchHistory = JSON.parse(localStorage.getItem("weatherSearches"));
@@ -216,7 +216,7 @@ document.getElementById("searchBtnInput").addEventListener("click", () => {
 
 // Fetches the weather api then calls buildForecast()
 function getForecast(lat, lon) {
-    fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=" + weatherSearchHistory.units)
+    fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + apey + "&units=" + weatherSearchHistory.units)
         .then(function (response) {
             return response.json();
         })
@@ -228,7 +228,7 @@ function getForecast(lat, lon) {
 
 // Fetches the weather api then calls buildWeather()
 function getWeather(lat, lon) {
-    fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=" + weatherSearchHistory.units)
+    fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apey + "&units=" + weatherSearchHistory.units)
         .then(function (response) {
             return response.json();
         })
@@ -243,7 +243,7 @@ function getGeoLoc(city) {
     if (city != "") {
         weatherSearchHistory.last = city;
         if (/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(city)) {
-            fetch("https://api.openweathermap.org/geo/1.0/zip?zip=" + city + ",US&appid=" + apiKey)
+            fetch("https://api.openweathermap.org/geo/1.0/zip?zip=" + city + ",US&appid=" + apey)
                 .then(function (response) {
                     return response.json();
                 })
@@ -256,7 +256,7 @@ function getGeoLoc(city) {
                     getForecast(data.lat, data.lon);
                 })
         } else {
-            fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + city + ",US&limit=1&appid=" + apiKey)
+            fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + city + ",US&limit=1&appid=" + apey)
                 .then(function (response) {
                     return response.json();
                 })
