@@ -15,7 +15,7 @@ This is a javascript application that uses OpenWeatherApi to provide the user wi
 
 The results are obtained when the user inputs either a zipCode or a CityName into the input field and clicks submit. 
 
-The application uses local storage to provide the user with a shortcut list of recent searches, which can also be individually deleted.
+The application uses local storage to provide the user with a shortcut list of recent searches, which can be individually deleted.
 
 The user may also choose between F and C unit types, and they may set a home location from a list of previous searches to run on pageload. These settings also persist in localStorage.
 
