@@ -7,19 +7,20 @@ if (weatherSearchHistory === null) {
     weatherSearchHistory = {
         home: 'Home Location',
         list: [],
-        units: 'imperial',
+        units: ['imperial', '°F'],
         last: "Springfild"
 
     };
 } else {
     // Selects the last used weather Unit type
-    $(".unitSelect option[value=" + weatherSearchHistory.units + "]").attr('selected', 'selected');
+    $(".unitSelect option[value=" + weatherSearchHistory.units[0].concat(" ", weatherSearchHistory.units[1]) + "]").attr('selected', 'selected');
 };
 
 
 // Allows Unit select to use F or C, updates on change
 document.querySelector('.unitSelect').addEventListener('change', function () {
-    weatherSearchHistory.units = document.querySelector('.unitSelect').value;
+    weatherSearchHistory.units = document.querySelector('.unitSelect').value.split(" ");
+    console.log(weatherSearchHistory.units);
     localStorage.setItem("weatherSearches", JSON.stringify(weatherSearchHistory));
     getGeoLoc(weatherSearchHistory.last);
 
@@ -125,17 +126,17 @@ function buildWeather(weatherData) {
     city.text(weatherData.name);
 
     var feelsTemp = $("<div>");
-    feelsTemp.text("Feels like: " + weatherData.main.feels_like + " F");
+    feelsTemp.text("Feels like: " + weatherData.main.feels_like + weatherSearchHistory.units[1]);
 
     var temp = $("<h>");
-    temp.text("Temp: " + weatherData.main.temp + " F").addClass("h3");
+    temp.text("Temp: " + weatherData.main.temp + weatherSearchHistory.units[1]).addClass("h3");
 
     var main = $("<h>");
     main.addClass("h2 card");
     main.text(weatherData.weather[0].main);
 
     var otherTemp = $("<div>");
-    otherTemp.text("Hi: " + weatherData.main.temp_max + " F / Lo: " + weatherData.main.temp_min + " F");
+    otherTemp.text("Hi: " + weatherData.main.temp_max + weatherSearchHistory.units[1] + " / Lo: " + weatherData.main.temp_min + weatherSearchHistory.units[1]);
 
     var wind = $("<div>");
     wind.text("Wind: " + weatherData.wind.speed + " MPH")
@@ -186,7 +187,7 @@ function buildforecast(forecastData) {
             iconLarger.addClass("iconLarger");
             iconLarger.attr('src', "https://openweathermap.org/img/wn/" + forecastData.list[i].weather[0].icon + ".png");
             var temp = $("<div>");
-            temp.text("Temp: " + forecastData.list[i].main.temp + " F");
+            temp.text("Temp: " + forecastData.list[i].main.temp + weatherSearchHistory.units[1]);
             var wind = $("<div>");
             wind.text("Wind: " + forecastData.list[i].wind.speed + " MPH");
             var humidity = $("<div>");
@@ -216,7 +217,7 @@ document.getElementById("searchBtnInput").addEventListener("click", () => {
 
 // Fetches the weather api then calls buildForecast()
 function getForecast(lat, lon) {
-    fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + apey + "&units=" + weatherSearchHistory.units)
+    fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + apey + "&units=" + weatherSearchHistory.units[0])
         .then(function (response) {
             return response.json();
         })
@@ -228,7 +229,7 @@ function getForecast(lat, lon) {
 
 // Fetches the weather api then calls buildWeather()
 function getWeather(lat, lon) {
-    fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apey + "&units=" + weatherSearchHistory.units)
+    fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apey + "&units=" + weatherSearchHistory.units[0])
         .then(function (response) {
             return response.json();
         })
