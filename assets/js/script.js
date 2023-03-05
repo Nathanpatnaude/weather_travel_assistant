@@ -21,7 +21,6 @@ if (weatherSearchHistory === null) {
 // Allows Unit select to use F or C, updates on change
 document.querySelector('.unitSelect').addEventListener('change', function () {
     weatherSearchHistory.units = document.querySelector('.unitSelect').value.split(" ");
-    console.log(weatherSearchHistory.units);
     localStorage.setItem("weatherSearches", JSON.stringify(weatherSearchHistory));
     getGeoLoc(weatherSearchHistory.last);
 
