@@ -5,25 +5,56 @@ var apiKey = "85b2ec11dc0efbf1ecf90462e1fcb01d"
 var weatherSearchHistory = JSON.parse(localStorage.getItem("weatherSearches"));
 if (weatherSearchHistory === null) {
     weatherSearchHistory = {
-        home: '',
+        home: 'Home Location',
         list: [],
+        units: 'imperial',
+        last: "Springfild"
+
     };
+} else {
+    // Selects the last used weather Unit type
+    $(".unitSelect option[value=" + weatherSearchHistory.units + "]").attr('selected', 'selected');
 };
-//load local storage weatherSearchHistory { home: "", recent: ["", ""]} / populate home dropdown
+
+
+// Allows Unit select to use F or C, updates on change
+document.querySelector('.unitSelect').addEventListener('change', function () {
+    weatherSearchHistory.units = document.querySelector('.unitSelect').value;
+    console.log(weatherSearchHistory.units);
+    localStorage.setItem("weatherSearches", JSON.stringify(weatherSearchHistory));
+    getGeoLoc(weatherSearchHistory.last);
+
+});
+
+//Allows home Select to use any preciously searched location, updates on Change
+document.querySelector('.homeSelect').addEventListener('change', function () {
+    weatherSearchHistory.home = document.querySelector('.homeSelect').value;
+    localStorage.setItem("weatherSearches", JSON.stringify(weatherSearchHistory));
+    if (weatherSearchHistory.home != weatherSearchHistory.last) {
+        getGeoLoc(weatherSearchHistory.home);
+    } else {
+        buildRecent(weatherSearchHistory.home);
+    }
+
+})
 
 function buildRecent(city) {
     // Builds a list of recent Seach Buttons In the Sidebar
     $(".searchRecent").empty();
 
+    $(".homeSelect").empty();
+    $('.homeSelect').append(`<option value="${weatherSearchHistory.home}" selected="selected">🏠${weatherSearchHistory.home}</option>`);
+
     for (let j = 0; j < weatherSearchHistory.list.length; j++) {
+        $('.homeSelect').append(`<option value="${weatherSearchHistory.list[j]}" >${weatherSearchHistory.list[j]}</option>`);
         var buttonRow = $("<div>");
         buttonRow.addClass("col-12 d-inline-flex recentItem");
 
         var index = $("<p>");
-        index.text(j + 1).addClass("col-1");
+        index.text(j + 1).addClass("invisible");
 
         var recentSearch = $("<button>");
-        recentSearch.addClass("searchBtn searchBtnRecent col-9")
+        recentSearch.addClass("searchBtn searchBtnRecent col-10")
         recentSearch.text(weatherSearchHistory.list[j]);
         if (weatherSearchHistory.list[j] === city) {
             recentSearch.css('background', "cornflowerblue");
@@ -31,9 +62,22 @@ function buildRecent(city) {
 
 
         var deleteSearch = $("<button>");
-        deleteSearch.addClass("searchBtn recentBtnDelete col-1").text("X").on('click', function () {
+        deleteSearch.addClass("searchBtn recentBtnDelete fa fa-trash").on('click', function () {
             //* deletes the array position[j]
             //* removes button parent and rebuildResponse()
+            //* if recent search was also the home location, home location is reset
+            if ($(this).siblings('.searchBtnRecent').text() === weatherSearchHistory.home) {
+                weatherSearchHistory.home = 'Home Location';
+
+            } else if ($(this).siblings('.searchBtnRecent').text() === weatherSearchHistory.last) {
+                if (weatherSearchHistory.home = 'Home Location') {
+                    weatherSearchHistory.last = 'Springfild';
+                    getGeoLoc(weatherSearchHistory.last);
+                } else {
+                    getGeoLoc(weatherSearchHistory.home);
+                }
+
+            };
             var searchPos = $(this).siblings().first().text();
             weatherSearchHistory.list.splice((searchPos - 1), 1);
             localStorage.setItem("weatherSearches", JSON.stringify(weatherSearchHistory));
@@ -127,35 +171,37 @@ function buildWeather(weatherData) {
 
 function buildforecast(forecastData) {
     // Builds HTML Forecast weather with the fetched Data
-    var forcastArrayPosition = 4;
     $(".forecastDays").empty();
     $(".fiveDayDesc").text("5-Day Forcast:");
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < forecastData.list.length; i++) {
+        var arrayTime = forecastData.list[i].dt_txt.split(" ");
 
-        var weatherCard = $("<div>");
-        weatherCard.addClass("card col");
-        var date = $("<p>");
-        dateArray = moment(forecastData.list[forcastArrayPosition].dt * 1000).format('L');
-        date.addClass("card-header");
-        date.text(dateArray);
-        var iconLarger = $("<img>");
-        iconLarger.addClass("iconLarger");
-        iconLarger.attr('src', "https://openweathermap.org/img/wn/" + forecastData.list[forcastArrayPosition].weather[0].icon + ".png");
-        var temp = $("<div>");
-        temp.text("Temp: " + forecastData.list[forcastArrayPosition].main.temp + " F");
-        var wind = $("<div>");
-        wind.text("Wind: " + forecastData.list[forcastArrayPosition].wind.speed + " MPH");
-        var humidity = $("<div>");
-        humidity.text("Humidity: " + forecastData.list[forcastArrayPosition].main.humidity + " %")
+        if (arrayTime[1] === "12:00:00") {
+            var weatherCard = $("<div>");
+            weatherCard.addClass("card col");
+            var date = $("<p>");
+            dateArray = moment(forecastData.list[i].dt * 1000).format('MM/DD/YY');
+            date.addClass("card-header");
+            date.text(dateArray);
+            var iconLarger = $("<img>");
+            iconLarger.addClass("iconLarger");
+            iconLarger.attr('src', "https://openweathermap.org/img/wn/" + forecastData.list[i].weather[0].icon + ".png");
+            var temp = $("<div>");
+            temp.text("Temp: " + forecastData.list[i].main.temp + " F");
+            var wind = $("<div>");
+            wind.text("Wind: " + forecastData.list[i].wind.speed + " MPH");
+            var humidity = $("<div>");
+            humidity.text("Humidity: " + forecastData.list[i].main.humidity + " %")
 
 
-        weatherCard.append(date);
-        weatherCard.append(iconLarger);
-        weatherCard.append(temp);
-        weatherCard.append(wind);
-        weatherCard.append(humidity);
-        $(".forecastDays").append(weatherCard);
-        forcastArrayPosition += 8;
+            weatherCard.append(date);
+            weatherCard.append(iconLarger);
+            weatherCard.append(temp);
+            weatherCard.append(wind);
+            weatherCard.append(humidity);
+            $(".forecastDays").append(weatherCard);
+
+        }
 
     };
 
@@ -165,13 +211,14 @@ function buildforecast(forecastData) {
 document.getElementById("searchBtnInput").addEventListener("click", () => {
     event.preventDefault();
     getGeoLoc(document.getElementsByClassName("searchInput")[0].value);
+    document.getElementsByClassName("searchInput")[0].value = "";
 
 });
 
 // Fetches the weather api then calls buildForecast()
 function getForecast(lat, lon) {
     console.log(lat, lon);
-    fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=imperial")
+    fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=" + weatherSearchHistory.units)
         .then(function (response) {
             return response.json();
         })
@@ -184,7 +231,7 @@ function getForecast(lat, lon) {
 // Fetches the weather api then calls buildWeather()
 function getWeather(lat, lon) {
     console.log(lat, lon);
-    fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=imperial")
+    fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=" + weatherSearchHistory.units)
         .then(function (response) {
             return response.json();
         })
@@ -196,40 +243,40 @@ function getWeather(lat, lon) {
 
 //Gets Lat & Lon from zipcode or city name and gets current weather and forecast for those coords
 function getGeoLoc(city) {
-
-
-    if (/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(city)) {
-        fetch("https://api.openweathermap.org/geo/1.0/zip?zip=" + city + ",US&appid=" + apiKey)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                if (!weatherSearchHistory.list.includes(city) && data.lat) {
-                    weatherSearchHistory.list.push(city)
-                };
-                buildRecent(city);
-                getWeather(data.lat, data.lon);
-                getForecast(data.lat, data.lon);
-            })
-    } else {
-        fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + city + ",US&limit=1&appid=" + apiKey)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                if (!weatherSearchHistory.list.includes(city) && data[0].lat && city != "Springfild") {
-                    weatherSearchHistory.list.push(city)
-                };
-                buildRecent(city);
-                getWeather(data[0].lat, data[0].lon);
-                getForecast(data[0].lat, data[0].lon);
-            })
+    if (city != "") {
+        weatherSearchHistory.last = city;
+        if (/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(city)) {
+            fetch("https://api.openweathermap.org/geo/1.0/zip?zip=" + city + ",US&appid=" + apiKey)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    if (!weatherSearchHistory.list.includes(city) && data.lat) {
+                        weatherSearchHistory.list.push(city)
+                    };
+                    buildRecent(city);
+                    getWeather(data.lat, data.lon);
+                    getForecast(data.lat, data.lon);
+                })
+        } else {
+            fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + city + ",US&limit=1&appid=" + apiKey)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    if (!weatherSearchHistory.list.includes(city) && data[0].lat && city != "Springfild") {
+                        weatherSearchHistory.list.push(city)
+                    };
+                    buildRecent(city);
+                    getWeather(data[0].lat, data[0].lon);
+                    getForecast(data[0].lat, data[0].lon);
+                })
+        }
     }
 }
 
-if (weatherSearchHistory.list[0]) {
-    getGeoLoc(weatherSearchHistory.list[0]);
-
+if (weatherSearchHistory.home != 'Home Location') {
+    getGeoLoc(weatherSearchHistory.home);
 } else {
-    getGeoLoc("Springfild");
+    getGeoLoc(weatherSearchHistory.last);
 }

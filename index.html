@@ -6,23 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./assets/css/style.css" />
     <title>Weather Travel Assistant</title>
 </head>
 
 <body>
-    <header>
-        <h1></h1>
+    <header class="" >
+        <div class="mr-auto col-3">
+            <i class="fa fa-home"></i>
+        <select class="homeSelect col-9" placeholder="Set Home Location">
+
+        </select>
+    </div>
+
         <h1>Weather Travel Assistant</h1>
     </header>
 
-    <div class="d-inline-flex">
+    <div class="container d-inline-flex">
         <div class="sideBar col-3">
             <form class="searchBox justify-center">
                 <h2>Search for a City:</h2>
                 <input name="city" type="text" placeholder="<Enter ZipCode or city name>" id="city" autofocus="true"
                     class="searchInput">
-                <button type="submit" class="searchBtn" id="searchBtnInput"> Search </button>
+                    <div class="col-12 d-inline-flex recentItem">
+                <button type="submit" class="searchBtn col-10" id="searchBtnInput"> Search </button>
+                <select class="unitSelect col-2">
+                    <option value="imperial" selected>F</option>
+                    <option value="metric">C</option>
+        
+                </select>
+            </div>
             </form>
             <hr>
             </hr>
