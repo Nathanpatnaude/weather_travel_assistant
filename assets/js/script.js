@@ -20,7 +20,6 @@ if (weatherSearchHistory === null) {
 // Allows Unit select to use F or C, updates on change
 document.querySelector('.unitSelect').addEventListener('change', function () {
     weatherSearchHistory.units = document.querySelector('.unitSelect').value;
-    console.log(weatherSearchHistory.units);
     localStorage.setItem("weatherSearches", JSON.stringify(weatherSearchHistory));
     getGeoLoc(weatherSearchHistory.last);
 
@@ -217,7 +216,6 @@ document.getElementById("searchBtnInput").addEventListener("click", () => {
 
 // Fetches the weather api then calls buildForecast()
 function getForecast(lat, lon) {
-    console.log(lat, lon);
     fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=" + weatherSearchHistory.units)
         .then(function (response) {
             return response.json();
@@ -230,7 +228,6 @@ function getForecast(lat, lon) {
 
 // Fetches the weather api then calls buildWeather()
 function getWeather(lat, lon) {
-    console.log(lat, lon);
     fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + apiKey + "&units=" + weatherSearchHistory.units)
         .then(function (response) {
             return response.json();
@@ -275,6 +272,7 @@ function getGeoLoc(city) {
     }
 }
 
+// On page load search home or last query
 if (weatherSearchHistory.home != 'Home Location') {
     getGeoLoc(weatherSearchHistory.home);
 } else {
