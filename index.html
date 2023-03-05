@@ -17,71 +17,32 @@
     </header>
 
     <div class="d-inline-flex">
-        <div class="sideBar col-3 ">
+        <div class="sideBar col-3">
             <form class="searchBox justify-center">
                 <h2>Search for a City:</h2>
-                <input name='city' type="text" placeholder="New York" id='city' autofocus='true' class='searchInput' />
+                <input name="city" type="text" placeholder="<Enter ZipCode or city name>" id="city" autofocus="true"
+                    class="searchInput">
                 <button type="submit" class="searchBtn" id="searchBtnInput"> Search </button>
             </form>
             <hr>
             </hr>
             <div class="searchRecent ">
-                <div class="col-12 d-inline-flex recentItem">
-                    <button type="submit" class="searchBtn searchBtnRecent col-10"> PlaceHolder </button>
-                    <button type="submit" class="searchBtn recentBtnDelete col-1"> X </button>
-                </div>
+
             </div>
         </div>
 
-        <div class="forecastResults container">
-            <div class="forecastToday col card">
-                <h2>City (Date)</h2>
-                <div> test </div>
-                <div> test </div>
-                <div> test </div>
+        <div class="forecastResults col-9">
+            <div class="forecastToday row">
+
             </div>
             <div class="forecastFive flex justify-content-evenly">
                 <div class="col-12">
-                <h2>5-Day Forecast:</h2>
-            </div>
-                <div class="forecastDays row">
-                    <div class="card col">
-                        
-                        <h4 class="card-header">3/2/23</h4>
-                        <p>Weather for this day</p>
-                        <p>Weather for this day</p>
-                        <p>Weather for this day</p>
-                    </div>
-                    <div class="card col">
-                        
-                        <p>Weather for this day</p>
-                        <p>Weather for this day</p>
-                        <p>Weather for this day</p>
-                        <p>Weather for this day</p>
-                    </div>
-                    <div class="card col">
-                        
-                        <p>Weather for this day</p>
-                        <p>Weather for this day</p>
-                        <p>Weather for this day</p>
-                        <p>Weather for this day</p>
-                    </div>
-                    <div class="card col">
-                        
-                        <p>Weather for this day</p>
-                        <p>Weather for this day</p>
-                        <p>Weather for this day</p>
-                        <p>Weather for this day</p>
-                    </div>
-                    <div class="card col">
-                        
-                        <p>Weather for this day</p>
-                        <p>Weather for this day</p>
-                        <p>Weather for this day</p>
-                        <p>Weather for this day</p>
-                    </div>
+                    <h2 class="fiveDayDesc">Loading...</h2>
                 </div>
-                
+                <div class="forecastDays row">
+
+                </div>
+
             </div>
         </div>
 

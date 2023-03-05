@@ -27,27 +27,42 @@ input {
 }
 
 .searchRecent {
-    margin-left: 10px;
+    margin-left: -20px;
     padding: 10px;
-    width: 100%;
     
 }
+
+
 
 .recentItem {
     padding: 0px;
     margin-left: 0px;
+    margin: 5px;
 
 }
 
 .card {
     padding: 10px;
     margin: 10px;
+    background-color: cornflowerblue;
+}
+
+.card-header {
+    font-size : 18px;
+    background-color: white;
 }
 
 .icon {
-    width:10%;
-    height:10%;
+    width:40%;
+    height:80%;
     margin-left: 25px;
+}
+
+.iconLarger {
+    width: 45px;
+    height:45px;
+    
+
 }
 
 #searchBtnInput {
