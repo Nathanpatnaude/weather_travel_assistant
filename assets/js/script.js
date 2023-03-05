@@ -13,7 +13,8 @@ if (weatherSearchHistory === null) {
     };
 } else {
     // Selects the last used weather Unit type
-    $(".unitSelect option[value=" + weatherSearchHistory.units[0].concat(" ", weatherSearchHistory.units[1]) + "]").attr('selected', 'selected');
+    var optionSel = weatherSearchHistory.units[0].concat(" ", weatherSearchHistory.units[1]);
+    $(`.unitSelect option[value="${optionSel}"]`).attr('selected', 'selected');
 };
 
 
