@@ -1,7 +1,7 @@
 
 var apey = "85b2ec11dc0efbf1ecf90462e1fcb01d"
 
-// Checks for localStorage or builds obj
+// Checks for localStorage or builds a default obj
 var weatherSearchHistory = JSON.parse(localStorage.getItem("weatherSearches"));
 if (weatherSearchHistory === null) {
     weatherSearchHistory = {
@@ -37,7 +37,7 @@ document.querySelector('.homeSelect').addEventListener('change', function () {
 })
 
 function buildRecent(city) {
-    // Builds a list of recent Seach Buttons In the Sidebar
+    // Builds a list of recent Seach Buttons In the Sidebar and <options> in .homeSelect 
     $(".searchRecent").empty();
 
     $(".homeSelect").empty();
@@ -61,9 +61,10 @@ function buildRecent(city) {
 
         var deleteSearch = $("<button>");
         deleteSearch.addClass("searchBtn recentBtnDelete fa fa-trash").on('click', function () {
-            //* deletes the array position[j]
-            //* removes button parent and rebuildResponse()
+            //* deletes the weatherSearchHistory.live[searchPos]
+            //* removes button parent and buildRecent()
             //* if recent search was also the home location, home location is reset
+            // if last location is deleted it is set to another recent search or reset
             var deleted = $(this).siblings('.searchBtnRecent').text()
             var searchPos = $(this).siblings().first().text();
             weatherSearchHistory.list.splice((searchPos - 1), 1)
@@ -249,7 +250,7 @@ function getWeather(lat, lon) {
 
 };
 
-//Gets Lat & Lon from zipcode or city name and gets current weather and forecast for those coords
+//Gets Lat & Lon from zipcode or city name then gets current weather and forecast for those coords
 function getGeoLoc(city) {
     if (city != "") {
         weatherSearchHistory.last = city;
