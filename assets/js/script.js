@@ -64,8 +64,11 @@ function buildRecent(city) {
             //* deletes the array position[j]
             //* removes button parent and rebuildResponse()
             //* if recent search was also the home location, home location is reset
-            if ($(this).siblings('.searchBtnRecent').text() === weatherSearchHistory.home) {
-                if (weatherSearchHistory.home === weatherSearchHistory.last && weatherSearchHistory.list.length < 2) {
+            var deleted = $(this).siblings('.searchBtnRecent').text()
+            var searchPos = $(this).siblings().first().text();
+            weatherSearchHistory.list.splice((searchPos - 1), 1)
+            if (deleted === weatherSearchHistory.home) {
+                if (weatherSearchHistory.home === weatherSearchHistory.last && weatherSearchHistory.list.length < 1) {
                     weatherSearchHistory.last = 'Springfild';
                 } else {
                     weatherSearchHistory.last = weatherSearchHistory.list[0];
@@ -73,17 +76,20 @@ function buildRecent(city) {
                 weatherSearchHistory.home = 'Home Location';
                 getGeoLoc(weatherSearchHistory.last);
 
-            } else if ($(this).siblings('.searchBtnRecent').text() === weatherSearchHistory.last) {
+            } else if (deleted === weatherSearchHistory.last) {
                 if (weatherSearchHistory.home = 'Home Location') {
+                    if (weatherSearchHistory.list.length < 1) {
                     weatherSearchHistory.last = 'Springfild';
+                    } else {
+                        weatherSearchHistory.last = weatherSearchHistory.list[0];
+                    }
                     getGeoLoc(weatherSearchHistory.last);
                 } else {
                     getGeoLoc(weatherSearchHistory.home);
                 }
 
             };
-            var searchPos = $(this).siblings().first().text();
-            weatherSearchHistory.list.splice((searchPos - 1), 1);
+;
             localStorage.setItem("weatherSearches", JSON.stringify(weatherSearchHistory));
             $(this).parent().remove();
             buildRecent(city);
